@@ -1,0 +1,138 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+const allPosts = await getCollection('blog');
+
+// Simulated most viewed posts (in a real app, this would come from analytics)
+const mostViewedPosts = allPosts
+  .sort(() => Math.random() - 0.5)
+  .slice(0, 4);
+
+const categories = [
+  {
+    title: 'Developer Blogs',
+    description: 'Deep dives into software development, coding tutorials, and best practices',
+    slug: 'dev',
+    color: 'blue',
+    icon: 'code'
+  },
+  {
+    title: 'AI & Machine Learning',
+    description: 'Exploring the latest in artificial intelligence and machine learning',
+    slug: 'ai',
+    color: 'purple',
+    icon: 'brain'
+  },
+  {
+    title: 'Daily Tech Life',
+    description: 'Day-to-day experiences, tips, and stories from the tech world',
+    slug: 'daily',
+    color: 'green',
+    icon: 'calendar'
+  }
+];
+---
+
+<Layout title="TechHub - Your Technology Blog Platform">
+  <!-- Hero Section -->
+  <section class="relative bg-white rounded-2xl shadow-sm overflow-hidden mb-16">
+    <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-800 opacity-90"></div>
+    <div class="relative py-16 px-8">
+      <div class="max-w-2xl mx-auto text-center text-white">
+        <h1 class="text-5xl font-serif font-bold mb-6">
+          Discover Tech Insights
+        </h1>
+        <p class="text-xl mb-8 text-primary-50">
+          Explore the latest in development, AI, and daily tech experiences through expert perspectives.
+        </p>
+        <div class="flex gap-4 justify-center">
+          <a 
+            href="/category/dev" 
+            class="bg-white text-primary-600 px-6 py-3 rounded-full hover:bg-primary-50 transition-colors duration-200"
+          >
+            Start Reading
+          </a>
+          <a 
+            href="/about" 
+            class="border-2 border-white text-white px-6 py-3 rounded-full hover:bg-white hover:text-primary-600 transition-colors duration-200"
+          >
+            Learn More
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Most Viewed Section -->
+  <section class="mb-16">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-2xl font-serif font-bold">Most Viewed Posts</h2>
+      <a href="/popular" class="text-primary-600 hover:text-primary-700">View All →</a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {mostViewedPosts.map(post => (
+        <article class="bg-white rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-1">
+          <div class="p-4">
+            <div class="text-xs text-primary-600 mb-2">{post.data.category.toUpperCase()}</div>
+            <h3 class="font-bold mb-2 line-clamp-2">
+              <a 
+                href={`/blog/${post.slug}`}
+                class="text-gray-900 hover:text-primary-600"
+              >
+                {post.data.title}
+              </a>
+            </h3>
+            <p class="text-sm text-gray-500">{post.data.author}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Categories Grid -->
+  <section class="grid md:grid-cols-3 gap-8 mb-16">
+    {categories.map(category => (
+      <a 
+        href={`/category/${category.slug}`}
+        class="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-all duration-200 transform hover:-translate-y-1"
+      >
+        <div class="flex items-center gap-4 mb-4">
+          <div class={`w-12 h-12 rounded-full bg-${category.color}-100 flex items-center justify-center`}>
+            <span class={`text-${category.color}-600 text-xl`}>
+              {category.icon === 'code' && '< />'}
+              {category.icon === 'brain' && '🧠'}
+              {category.icon === 'calendar' && '📅'}
+            </span>
+          </div>
+          <h2 class="text-xl font-bold">{category.title}</h2>
+        </div>
+        <p class="text-gray-600 mb-4">{category.description}</p>
+        <span class="inline-block text-primary-600 hover:text-primary-700">
+          Browse Articles →
+        </span>
+      </a>
+    ))}
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="bg-gray-900 text-white rounded-2xl p-8 mt-16">
+    <div class="max-w-2xl mx-auto text-center">
+      <h2 class="text-3xl font-serif font-bold mb-4">Stay Updated</h2>
+      <p class="text-gray-300 mb-6">Get the latest tech insights delivered straight to your inbox.</p>
+      <form class="flex gap-4 max-w-md mx-auto">
+        <input 
+          type="email" 
+          placeholder="Enter your email" 
+          class="flex-1 px-4 py-2 rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500"
+        />
+        <button 
+          type="submit" 
+          class="bg-primary-600 px-6 py-2 rounded-full hover:bg-primary-700 transition-colors duration-200"
+        >
+          Subscribe
+        </button>
+      </form>
+    </div>
+  </section>
+</Layout>

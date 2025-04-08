@@ -1,0 +1,111 @@
+---
+import '@fontsource/source-serif-pro';
+import '@fontsource/open-sans';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = 'A modern blog built with Astro' } = Astro.props;
+
+const navItems = [
+  { title: 'Home', path: '/' },
+  { 
+    title: 'Spaces', 
+    children: [
+      { title: 'Developer Blogs', path: '/category/dev' },
+      { title: 'AI & ML', path: '/category/ai' },
+      { title: 'Daily Tech', path: '/category/daily' }
+    ]
+  },
+  { title: 'Popular', path: '/popular' },
+  { title: 'About', path: '/about' }
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body class="min-h-screen flex flex-col bg-gray-50">
+    <header class="bg-white border-b border-gray-200 relative z-50">
+      <div class="container-custom">
+        <!-- Top bar with search -->
+        <div class="py-3 flex justify-between items-center border-b border-gray-100">
+          <a href="/" class="text-2xl font-serif font-bold text-primary-700">
+            TechHub
+          </a>
+          <div class="relative w-64">
+            <input 
+              type="search" 
+              placeholder="Search articles..." 
+              class="w-full pl-10 pr-4 py-2 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
+            />
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+            </svg>
+          </div>
+        </div>
+        
+        <!-- Main navigation -->
+        <nav class="flex justify-between items-center py-4">
+          <ul class="flex items-center gap-8">
+            {navItems.map(item => (
+              <li class="relative group">
+                {item.children ? (
+                  <div class="relative">
+                    <button 
+                      class="flex items-center gap-1 text-gray-600 hover:text-primary-600 cursor-pointer peer"
+                      aria-haspopup="true"
+                    >
+                      {item.title}
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    <div class="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden peer-focus:block hover:block">
+                      {item.children.map(child => (
+                        <a 
+                          href={child.path}
+                          class="block px-4 py-2 text-gray-800 hover:bg-primary-50 hover:text-primary-600"
+                        >
+                          {child.title}
+                        </a>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <a 
+                    href={item.path}
+                    class="text-gray-600 hover:text-primary-600 transition-colors duration-200"
+                  >
+                    {item.title}
+                  </a>
+                )}
+              </li>
+            ))}
+          </ul>
+          
+          <button class="bg-primary-600 text-white px-4 py-2 rounded-full hover:bg-primary-700 transition-colors duration-200">
+            Subscribe
+          </button>
+        </nav>
+      </div>
+    </header>
+
+    <main class="flex-grow container-custom py-12">
+      <slot />
+    </main>
+
+    <!-- Rest of the footer remains the same -->
+    <footer class="bg-gray-900 text-white mt-12">
+      <!-- Previous footer content remains unchanged -->
+    </footer>
+  </body>
+</html>

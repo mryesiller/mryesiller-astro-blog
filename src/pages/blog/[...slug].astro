@@ -1,0 +1,49 @@
+---
+import { getCollection } from 'astro:content';
+import Layout from '../../layouts/Layout.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+const { post } = Astro.props;
+const { Content } = await post.render();
+---
+
+<Layout title={post.data.title}>
+  <article class="max-w-3xl mx-auto">
+    <div class="mb-8">
+      <a href={`/category/${post.data.category}`} class="text-primary-600 hover:text-primary-700 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L4.414 9H17a1 1 0 110 2H4.414l5.293 5.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        Back to {post.data.category.toUpperCase()} Blogs
+      </a>
+    </div>
+
+    <header class="text-center mb-12">
+      <div class="text-sm text-primary-600 mb-2">{post.data.category.toUpperCase()}</div>
+      <h1 class="text-4xl font-serif font-bold mb-4">{post.data.title}</h1>
+      <p class="text-xl text-gray-600 mb-4">{post.data.description}</p>
+      <div class="flex justify-center items-center gap-4 text-sm text-gray-500">
+        <span>{post.data.author}</span>
+        <span>•</span>
+        <time datetime={post.data.pubDate.toISOString()}>
+          {new Date(post.data.pubDate).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })}
+        </time>
+      </div>
+    </header>
+
+    <div class="prose prose-lg mx-auto">
+      <Content />
+    </div>
+  </article>
+</Layout>

@@ -1,0 +1,34 @@
+---
+import Layout from './Layout.astro';
+
+const { frontmatter } = Astro.props;
+---
+
+<Layout title={frontmatter.title} description={frontmatter.description}>
+  <article class="prose prose-lg mx-auto">
+    <div class="mb-8">
+      <a href="/blog" class="text-primary-600 hover:text-primary-700 flex items-center gap-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+          <path fill-rule="evenodd" d="M9.707 16.707a1 1 0 01-1.414 0l-6-6a1 1 0 010-1.414l6-6a1 1 0 011.414 1.414L4.414 9H17a1 1 0 110 2H4.414l5.293 5.293a1 1 0 010 1.414z" clip-rule="evenodd" />
+        </svg>
+        Back to Blog
+      </a>
+    </div>
+    
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-bold mb-4">{frontmatter.title}</h1>
+      <p class="text-xl text-gray-600 mb-4">{frontmatter.description}</p>
+      <time datetime={frontmatter.pubDate} class="text-gray-500">
+        {new Date(frontmatter.pubDate).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        })}
+      </time>
+    </header>
+    
+    <div class="prose-headings:font-serif prose-headings:font-bold prose-a:text-primary-600 prose-a:no-underline hover:prose-a:underline prose-pre:bg-gray-900 prose-pre:text-gray-100">
+      <slot />
+    </div>
+  </article>
+</Layout>
