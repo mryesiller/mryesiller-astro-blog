@@ -8,23 +8,53 @@ const translatePath = useTranslatedPath(currentLang);
 const route = getRouteFromUrl(url);
 ---
 
-<div class="language-picker">
-  <ul>
+<div class="language-picker relative">
+  <button 
+    id="languageDropdownButton"
+    class="flex items-center gap-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 py-2 px-3 rounded-lg"
+  >
+    <span>{languages[currentLang]}</span>
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+    </svg>
+  </button>
+  
+  <div id="languageDropdown" class="absolute right-0 mt-1 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg py-2 hidden z-50">
     {Object.entries(languages).map(([lang, label]) => (
-      <li>
-        <a 
-          href={`/${lang}${route}`} 
-          class={`nav-link ${currentLang === lang ? 'font-bold text-primary-600' : ''}`}
-        >
-          {label}
-        </a>
-      </li>
+      <a 
+        href={`/${lang}${route}`} 
+        class={`block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-primary-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 ${currentLang === lang ? 'font-bold text-primary-600 dark:text-primary-400' : ''}`}
+      >
+        {label}
+      </a>
     ))}
-  </ul>
+  </div>
 </div>
 
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const dropdownButton = document.getElementById('languageDropdownButton');
+    const dropdown = document.getElementById('languageDropdown');
+    
+    if (dropdownButton && dropdown) {
+      // Toggle dropdown on button click
+      dropdownButton.addEventListener('click', (e) => {
+        e.stopPropagation();
+        dropdown.classList.toggle('hidden');
+      });
+      
+      // Close dropdown when clicking elsewhere
+      document.addEventListener('click', (e) => {
+        if (!dropdown.contains(e.target as Node) && !dropdownButton.contains(e.target as Node)) {
+          dropdown.classList.add('hidden');
+        }
+      });
+    }
+  });
+</script>
+
 <style>
-  .language-picker ul {
-    @apply flex gap-4;
+  .language-picker {
+    position: relative;
   }
 </style> 

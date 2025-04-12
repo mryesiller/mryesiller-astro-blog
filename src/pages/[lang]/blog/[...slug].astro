@@ -8,7 +8,10 @@ export async function getStaticPaths() {
   const posts = await getCollection('blog');
   
   return Object.keys(languages).flatMap(lang => {
-    return posts.map(post => ({
+    // Filter posts by language
+    const langPosts = posts.filter(post => post.data.lang === lang);
+    
+    return langPosts.map(post => ({
       params: { 
         lang,
         slug: post.slug 

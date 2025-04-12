@@ -8,6 +8,7 @@ const blogCollection = defineCollection({
     category: z.enum(['dev', 'ai', 'daily']),
     author: z.string(),
     image: z.string().optional(),
+    lang: z.enum(['en', 'tr']),
   }),
 });
 

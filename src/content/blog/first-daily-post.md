@@ -4,6 +4,7 @@ description: "Daily experiences and challenges in software development"
 pubDate: 2023-11-03
 category: "daily"
 author: "Mike Johnson"
+lang: "en"
 ---
 
 # A Day in the Life of a Developer

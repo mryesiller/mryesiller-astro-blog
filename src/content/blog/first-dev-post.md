@@ -4,6 +4,7 @@ description: "A deep dive into the latest JavaScript features and best practices
 pubDate: 2023-11-01
 category: "dev"
 author: "John Doe"
+lang: "en"
 ---
 
 # Understanding Modern JavaScript Features

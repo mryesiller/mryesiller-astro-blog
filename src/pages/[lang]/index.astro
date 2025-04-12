@@ -13,10 +13,12 @@ const { lang } = Astro.params;
 const t = useTranslations(lang as keyof typeof languages);
 const translatePath = useTranslatedPath(lang as keyof typeof languages);
 
+// Get all posts and filter by the current language
 const allPosts = await getCollection('blog');
+const languageFilteredPosts = allPosts.filter(post => post.data.lang === lang);
 
 // Simulated most viewed posts (in a real app, this would come from analytics)
-const mostViewedPosts = allPosts
+const mostViewedPosts = languageFilteredPosts
   .sort(() => Math.random() - 0.5)
   .slice(0, 4);
 

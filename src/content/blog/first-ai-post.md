@@ -4,6 +4,7 @@ description: "Getting started with machine learning concepts"
 pubDate: 2023-11-02
 category: "ai"
 author: "Jane Smith"
+lang: "en"
 ---
 
 # Introduction to Machine Learning

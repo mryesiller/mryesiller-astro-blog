@@ -196,6 +196,27 @@ declare module 'astro:content' {
   collection: "blog";
   data: InferEntrySchema<"blog">
 } & { render(): Render[".md"] };
+"gelistirici-yasami.md": {
+	id: "gelistirici-yasami.md";
+  slug: "gelistirici-yasami";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"modern-javascript.md": {
+	id: "modern-javascript.md";
+  slug: "modern-javascript";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
+"yapay-zeka-giris.md": {
+	id: "yapay-zeka-giris.md";
+  slug: "yapay-zeka-giris";
+  body: string;
+  collection: "blog";
+  data: InferEntrySchema<"blog">
+} & { render(): Render[".md"] };
 };
 
 	};

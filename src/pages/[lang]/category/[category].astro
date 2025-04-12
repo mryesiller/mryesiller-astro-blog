@@ -9,10 +9,13 @@ export async function getStaticPaths() {
   const categories = [...new Set(posts.map(post => post.data.category))];
   
   return Object.keys(languages).flatMap(lang => {
+    // Filter posts by language for each language path
+    const langPosts = posts.filter(post => post.data.lang === lang);
+    
     return categories.map(category => ({
       params: { lang, category },
       props: { 
-        posts: posts.filter(post => post.data.category === category),
+        posts: langPosts.filter(post => post.data.category === category),
         category 
       },
     }));
