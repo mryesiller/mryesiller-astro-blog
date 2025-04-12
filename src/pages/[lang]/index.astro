@@ -25,21 +25,21 @@ const mostViewedPosts = languageFilteredPosts
 const categories = [
   {
     title: t('nav.dev'),
-    description: 'Deep dives into software development, coding tutorials, and best practices',
+    description: t('nav.dev_desc'),
     slug: 'dev',
     color: 'blue',
     icon: 'code'
   },
   {
     title: t('nav.ai'),
-    description: 'Exploring the latest in artificial intelligence and machine learning',
+    description: t('nav.ai_desc'),
     slug: 'ai',
     color: 'purple',
     icon: 'brain'
   },
   {
     title: t('nav.daily'),
-    description: 'Day-to-day experiences, tips, and stories from the tech world',
+    description: t('nav.daily_desc'),
     slug: 'daily',
     color: 'green',
     icon: 'calendar'
@@ -74,8 +74,8 @@ const categories = [
   <!-- Most Viewed Section -->
   <section class="mb-16">
     <div class="flex justify-between items-center mb-8">
-      <h2 class="text-2xl font-serif font-bold">Most Viewed Posts</h2>
-      <a href={translatePath('/popular')} class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">View All →</a>
+      <h2 class="text-2xl font-serif font-bold">{t('title.most_viewed')}</h2>
+      <a href={translatePath('/popular')} class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">{t('arrow.view_all')}</a>
     </div>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
       {mostViewedPosts.map(post => (

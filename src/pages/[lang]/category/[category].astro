@@ -33,19 +33,19 @@ let title, description;
 switch(category) {
   case 'dev':
     title = t('nav.dev');
-    description = 'Deep dives into software development, coding tutorials, and best practices';
+    description = t('nav.dev_desc');
     break;
   case 'ai':
     title = t('nav.ai');
-    description = 'Exploring the latest in artificial intelligence and machine learning';
+    description = t('nav.ai_desc');
     break;
   case 'daily':
     title = t('nav.daily');
-    description = 'Day-to-day experiences, tips, and stories from the tech world';
+    description = t('nav.daily_desc');
     break;
   default:
     title = category;
-    description = 'Articles in this category';
+    description = t('category.browse');
 }
 ---
 

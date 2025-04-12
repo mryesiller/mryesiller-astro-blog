@@ -15,24 +15,44 @@ const t = useTranslations(lang as keyof typeof languages);
   <div class="max-w-3xl mx-auto">
     <h1 class="text-4xl font-serif font-bold mb-8">{t('about.title')}</h1>
     
-    <div class="bg-white rounded-lg shadow-sm p-8 mb-12">
+    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-8 mb-12">
       <div class="flex flex-col md:flex-row gap-8 items-start">
         <img 
           src="https://avatars.githubusercontent.com/u/mryesiller" 
-          alt="Profile" 
+          alt="Göksel Yeşiller" 
           class="rounded-lg w-48 h-48 object-cover"
         />
         <div>
-          <h2 class="text-2xl font-bold mb-4">mryesiller</h2>
-          <p class="text-gray-600 mb-4">
-            I'm a software developer with over 5 years of experience in web development. 
-            I'm passionate about creating efficient, scalable solutions and sharing knowledge 
-            with the developer community.
-          </p>
+          <h2 class="text-2xl font-bold mb-4">Göksel Yeşiller (mryesiller)</h2>
+          
+          {lang === 'en' ? (
+            <div>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                I'm a Software Developer specializing in JavaScript, React, and Node.js. 
+                Currently working at Fimple and based in Istanbul, Turkey. I'm passionate about 
+                developing efficient web applications and exploring new technologies.
+              </p>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                <span class="font-semibold">🏠 Working from home</span>
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                JavaScript, React ve Node.js konularında uzmanlaşmış bir Yazılım Geliştiriciyim. 
+                Şu anda Fimple'da çalışıyorum ve İstanbul'da yaşıyorum. Verimli web uygulamaları 
+                geliştirmeye ve yeni teknolojileri keşfetmeye tutkuyla bağlıyım.
+              </p>
+              <p class="text-gray-600 dark:text-gray-300 mb-4">
+                <span class="font-semibold">🏠 Evden çalışıyorum</span>
+              </p>
+            </div>
+          )}
+          
           <div class="flex gap-4">
             <a 
-              href="https://twitter.com/mryesiller" 
-              class="text-primary-600 hover:text-primary-700"
+              href="https://twitter.com/MrYesiller" 
+              class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -40,19 +60,19 @@ const t = useTranslations(lang as keyof typeof languages);
             </a>
             <a 
               href="https://github.com/mryesiller" 
-              class="text-primary-600 hover:text-primary-700"
+              class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
               target="_blank"
               rel="noopener noreferrer"
             >
               GitHub
             </a>
             <a 
-              href="https://linkedin.com/in/mryesiller" 
-              class="text-primary-600 hover:text-primary-700"
+              href="https://mryesiller.bio.link/" 
+              class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300"
               target="_blank"
               rel="noopener noreferrer"
             >
-              LinkedIn
+              Bio Link
             </a>
           </div>
         </div>
@@ -61,25 +81,51 @@ const t = useTranslations(lang as keyof typeof languages);
 
     <section class="grid gap-8">
       <div>
-        <h2 class="text-2xl font-serif font-bold mb-4">Skills</h2>
-        <div class="bg-white rounded-lg shadow-sm p-6">
-          <div class="grid grid-cols-2 gap-6">
+        <h2 class="text-2xl font-serif font-bold mb-4">{lang === 'en' ? 'Skills & Technologies' : 'Yetenekler & Teknolojiler'}</h2>
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <h3 class="font-bold text-lg mb-2">Languages</h3>
-              <ul class="list-disc list-inside text-gray-600">
-                <li>JavaScript / TypeScript</li>
-                <li>HTML & CSS</li>
-                <li>Python</li>
-                <li>PHP</li>
+              <h3 class="font-bold text-lg mb-2">{lang === 'en' ? 'Frontend' : 'Ön Uç'}</h3>
+              <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
+                <li>React</li>
+                <li>Next.js</li>
               </ul>
             </div>
             <div>
-              <h3 class="font-bold text-lg mb-2">Frameworks & Tools</h3>
-              <ul class="list-disc list-inside text-gray-600">
-                <li>React / Next.js</li>
+              <h3 class="font-bold text-lg mb-2">{lang === 'en' ? 'Backend' : 'Arka Uç'}</h3>
+              <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
                 <li>Node.js</li>
-                <li>Astro</li>
-                <li>Git</li>
+                <li>NestJs</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-2">{lang === 'en' ? 'Core Languages' : 'Temel Diller'}</h3>
+              <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
+                <li>JavaScript / TypeScript</li>
+                <li>Python</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-2">{lang === 'en' ? 'Database' : 'Veritabanı'}</h3>
+              <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
+                <li>MySQL</li>
+                <li>PostgreSQL</li>
+                <li>MongoDB</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-2">{lang === 'en' ? 'Cloud & DevOps' : 'Bulut & DevOps'}</h3>
+              <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
+                <li>Azure, Heroku, Netlify, Vercel</li>
+                <li>Docker</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-2">{lang === 'en' ? 'Others' : 'Diğerleri'}</h3>
+              <ul class="list-disc list-inside text-gray-600 dark:text-gray-300">
+                <li>Selenium (Testing)</li>
+                <li>Linux</li>
+                <li>VS Code</li>
               </ul>
             </div>
           </div>
@@ -88,13 +134,15 @@ const t = useTranslations(lang as keyof typeof languages);
 
       <div>
         <h2 class="text-2xl font-serif font-bold mb-4">{t('about.contact')}</h2>
-        <div class="bg-white rounded-lg shadow-sm p-6">
-          <p class="mb-4">
-            {t('about.contactText')}
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6">
+          <p class="mb-4 text-gray-600 dark:text-gray-300">
+            {lang === 'en' 
+              ? "I'm always interested in hearing about new projects and opportunities. Feel free to reach out if you'd like to collaborate or just chat about technology."
+              : "Her zaman yeni projeler ve fırsatlar hakkında bilgi almakla ilgileniyorum. İşbirliği yapmak istiyorsanız veya sadece teknoloji hakkında sohbet etmek için benimle iletişime geçmekten çekinmeyin."}
           </p>
           <a 
             href="mailto:contact@example.com" 
-            class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors duration-200"
+            class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors duration-200 dark:bg-primary-700 dark:hover:bg-primary-600"
           >
             {t('about.email')}
           </a>
