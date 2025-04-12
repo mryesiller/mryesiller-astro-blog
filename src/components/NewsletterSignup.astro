@@ -15,19 +15,19 @@ const t = useTranslations(lang as any);
   
   <form 
     id="newsletter-form" 
-    class="flex gap-4 max-w-md mx-auto"
-    method="POST"
+    class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto"
   >
     <input 
       type="email" 
       id="subscriber-email"
       name="email"
       placeholder={t('newsletter.placeholder')}
-      class="flex-1 px-4 py-2 rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500"
+      class="flex-1 px-4 py-2 rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-gray-200"
       required
     />
     <button 
       type="submit" 
+      id="subscribe-button"
       class="bg-primary-600 px-6 py-2 rounded-full hover:bg-primary-700 transition-colors duration-200"
     >
       {t('newsletter.button')}
@@ -35,16 +35,17 @@ const t = useTranslations(lang as any);
   </form>
   
   <div id="subscription-success" class="mt-4 text-green-400 hidden">
-    Thank you for subscribing!
+    {lang === 'en' ? 'Thank you for subscribing!' : 'Abone olduğunuz için teşekkürler!'}
   </div>
   <div id="subscription-error" class="mt-4 text-red-400 hidden">
-    There was an error. Please try again.
+    {lang === 'en' ? 'There was an error. Please try again.' : 'Bir hata oluştu. Lütfen tekrar deneyin.'}
   </div>
 </div>
 
 <script>
   document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('newsletter-form') as HTMLFormElement;
+    const subscribeButton = document.getElementById('subscribe-button') as HTMLButtonElement;
     const successMessage = document.getElementById('subscription-success');
     const errorMessage = document.getElementById('subscription-error');
     
@@ -55,22 +56,25 @@ const t = useTranslations(lang as any);
         const emailInput = document.getElementById('subscriber-email') as HTMLInputElement;
         const email = emailInput.value;
         
+        // Show loading state
+        if (subscribeButton) {
+          subscribeButton.disabled = true;
+          subscribeButton.innerHTML = '<span class="inline-block animate-spin mr-2">↻</span> Processing...';
+        }
+        
         try {
-          // In a real implementation, this would call a server endpoint that uses Mailjet API
-          // For this demo, we'll simulate a successful subscription
+          // Send subscription request to our API endpoint
+          const response = await fetch('/api/subscribe', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+          });
           
-          // Simulate API call
-          // const response = await fetch('/api/subscribe', {
-          //   method: 'POST',
-          //   headers: {
-          //     'Content-Type': 'application/json',
-          //   },
-          //   body: JSON.stringify({ email }),
-          // });
-          
-          // if (!response.ok) {
-          //   throw new Error('Subscription failed');
-          // }
+          if (!response.ok) {
+            throw new Error('Subscription failed');
+          }
           
           // Show success message
           if (successMessage) {
@@ -83,11 +87,6 @@ const t = useTranslations(lang as any);
           // Reset form
           form.reset();
           
-          // In a real implementation with Mailjet, you would:
-          // 1. Create a server endpoint (e.g., /api/subscribe)
-          // 2. Use Mailjet Node.js SDK to add the subscriber to a contact list
-          // 3. Handle errors and return appropriate responses
-          
         } catch (error) {
           // Show error message
           if (errorMessage) {
@@ -97,8 +96,21 @@ const t = useTranslations(lang as any);
             successMessage.classList.add('hidden');
           }
           console.error('Subscription error:', error);
+        } finally {
+          // Reset button state
+          if (subscribeButton) {
+            subscribeButton.disabled = false;
+            const lang = document.documentElement.lang;
+            subscribeButton.innerHTML = lang === 'tr' ? 'Abone Ol' : 'Subscribe';
+          }
         }
       });
     }
   });
-</script> 
+</script>
+
+<style>
+  .newsletter-container {
+    position: relative;
+  }
+</style> 
