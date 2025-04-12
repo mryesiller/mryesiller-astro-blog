@@ -1,6 +1,7 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
+import { defaultLang } from '../i18n/ui';
 
 const allPosts = await getCollection('blog');
 
@@ -32,6 +33,10 @@ const categories = [
     icon: 'calendar'
   }
 ];
+
+// Redirect to default language page
+Astro.response.status = 301;
+Astro.response.headers.set('Location', `/${defaultLang}`);
 ---
 
 <Layout title="TechHub - Your Technology Blog Platform">

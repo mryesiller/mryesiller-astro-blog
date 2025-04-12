@@ -1,7 +1,9 @@
 ---
-import '@fontsource/source-serif-pro';
-import '@fontsource/open-sans';
 import '../styles/global.css';
+import LanguagePicker from '../components/LanguagePicker.astro';
+import ThemeToggle from '../components/ThemeToggle.astro';
+import SearchBar from '../components/SearchBar.astro';
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '../i18n/utils';
 
 interface Props {
   title: string;
@@ -9,47 +11,56 @@ interface Props {
 }
 
 const { title, description = 'A modern blog built with Astro' } = Astro.props;
+const url = Astro.url;
+const lang = getLangFromUrl(url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
 
 const navItems = [
-  { title: 'Home', path: '/' },
+  { title: t('nav.home'), path: translatePath('/') },
   { 
-    title: 'Spaces', 
+    title: t('nav.spaces'), 
     children: [
-      { title: 'Developer Blogs', path: '/category/dev' },
-      { title: 'AI & ML', path: '/category/ai' },
-      { title: 'Daily Tech', path: '/category/daily' }
+      { title: t('nav.dev'), path: translatePath('/category/dev') },
+      { title: t('nav.ai'), path: translatePath('/category/ai') },
+      { title: t('nav.daily'), path: translatePath('/category/daily') }
     ]
   },
-  { title: 'Popular', path: '/popular' },
-  { title: 'About', path: '/about' }
+  { title: t('nav.about'), path: translatePath('/about') }
 ];
 ---
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang={lang} class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="description" content={description} />
     <title>{title}</title>
+    <script is:inline>
+      // Initialize dark mode immediately to prevent FOUC (flash of unstyled content)
+      const userTheme = localStorage.getItem('theme');
+      const systemDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      
+      if (userTheme === 'dark' || (!userTheme && systemDarkMode)) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
   </head>
-  <body class="min-h-screen flex flex-col bg-gray-50">
-    <header class="bg-white border-b border-gray-200 relative z-50">
+  <body class="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-900 dark:text-gray-100">
+    <header class="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 relative z-50">
       <div class="container-custom">
-        <!-- Top bar with search -->
-        <div class="py-3 flex justify-between items-center border-b border-gray-100">
-          <a href="/" class="text-2xl font-serif font-bold text-primary-700">
+        <!-- Top bar with search, theme toggle and language picker -->
+        <div class="py-3 flex justify-between items-center border-b border-gray-100 dark:border-gray-700">
+          <a href={translatePath('/')} class="text-2xl font-serif font-bold text-primary-700 dark:text-primary-400">
             TechHub
           </a>
-          <div class="relative w-64">
-            <input 
-              type="search" 
-              placeholder="Search articles..." 
-              class="w-full pl-10 pr-4 py-2 border rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-primary-500"
-            />
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 absolute left-3 top-2.5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-            </svg>
+          <div class="flex items-center gap-6">
+            <ThemeToggle />
+            <LanguagePicker />
+            <SearchBar lang={lang} />
           </div>
         </div>
         
@@ -61,15 +72,16 @@ const navItems = [
                 {item.children ? (
                   <div class="relative">
                     <button 
-                      class="flex items-center gap-1 text-gray-600 hover:text-primary-600 cursor-pointer peer"
+                      class="flex items-center gap-1 text-gray-600 hover:text-primary-600 cursor-pointer"
                       aria-haspopup="true"
+                      id="spacesDropdownButton"
                     >
                       {item.title}
                       <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                       </svg>
                     </button>
-                    <div class="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden peer-focus:block hover:block">
+                    <div id="spacesDropdown" class="absolute left-0 mt-2 w-48 bg-white rounded-lg shadow-lg py-2 hidden">
                       {item.children.map(child => (
                         <a 
                           href={child.path}
@@ -104,8 +116,32 @@ const navItems = [
     </main>
 
     <!-- Rest of the footer remains the same -->
-    <footer class="bg-gray-900 text-white mt-12">
+    <footer class="bg-gray-900 dark:bg-gray-950 text-white mt-12">
       <!-- Previous footer content remains unchanged -->
     </footer>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const dropdownButton = document.getElementById('spacesDropdownButton');
+        const dropdown = document.getElementById('spacesDropdown');
+        
+        if (dropdownButton && dropdown) {
+          // Toggle dropdown on button click
+          dropdownButton.addEventListener('click', (e) => {
+            e.stopPropagation();
+            dropdown.classList.toggle('hidden');
+          });
+          
+          // Close dropdown when clicking elsewhere
+          document.addEventListener('click', (e) => {
+            if (dropdown && dropdownButton && 
+                !dropdown.contains(e.target as Node) && 
+                !dropdownButton.contains(e.target as Node)) {
+              dropdown.classList.add('hidden');
+            }
+          });
+        }
+      });
+    </script>
   </body>
 </html>

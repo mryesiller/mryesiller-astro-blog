@@ -1,5 +1,6 @@
 ---
 import { getCollection } from 'astro:content';
+import { defaultLang } from '../../i18n/ui';
 import Layout from '../../layouts/Layout.astro';
 
 export async function getStaticPaths() {
@@ -11,6 +12,12 @@ export async function getStaticPaths() {
 }
 
 const { post } = Astro.props;
+const { slug } = Astro.params;
+
+// Redirect to default language page
+Astro.response.status = 301;
+Astro.response.headers.set('Location', `/${defaultLang}/blog/${slug}`);
+
 const { Content } = await post.render();
 ---
 

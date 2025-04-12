@@ -1,5 +1,9 @@
 ---
-import Layout from '../layouts/Layout.astro';
+import { defaultLang } from '../i18n/ui';
+
+// Redirect to default language page
+Astro.response.status = 301;
+Astro.response.headers.set('Location', `/${defaultLang}/about`);
 ---
 
 <Layout title="About - DevBlog">

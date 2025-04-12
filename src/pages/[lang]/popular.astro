@@ -1,0 +1,56 @@
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { languages } from '../../i18n/ui';
+import { useTranslations, useTranslatedPath } from '../../i18n/utils';
+
+export async function getStaticPaths() {
+  return Object.keys(languages).map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+const translatePath = useTranslatedPath(lang as keyof typeof languages);
+
+// Simulated most popular posts (in a real app, this would come from analytics)
+const allPosts = await getCollection('blog');
+const popularPosts = allPosts
+  .sort(() => Math.random() - 0.5) // Random sort for demonstration
+  .slice(0, 10); // Show 10 popular posts
+
+<Layout title="Popular Posts - TechHub">
+  <div class="max-w-4xl mx-auto">
+    <header class="text-center mb-12">
+      <h1 class="text-4xl font-serif font-bold mb-4">Most Popular Posts</h1>
+      <p class="text-xl text-gray-600">Our readers' favorite articles</p>
+    </header>
+
+    <div class="grid gap-8">
+      {popularPosts.map(post => (
+        <article class="bg-white rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200">
+          <div class="p-8">
+            <div class="text-sm text-primary-600 mb-2">{post.data.category.toUpperCase()}</div>
+            <h2 class="text-2xl font-bold mb-4">
+              <a 
+                href={translatePath(`/blog/${post.slug}`)}
+                class="text-gray-900 hover:text-primary-600 transition-colors duration-200"
+              >
+                {post.data.title}
+              </a>
+            </h2>
+            <p class="text-gray-600 mb-6">{post.data.description}</p>
+            <div class="flex justify-between items-center text-sm">
+              <span class="text-gray-500">{post.data.author}</span>
+              <time datetime={post.data.pubDate.toISOString()} class="text-gray-500">
+                {new Date(post.data.pubDate).toLocaleDateString(lang, {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric'
+                })}
+              </time>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</Layout> 

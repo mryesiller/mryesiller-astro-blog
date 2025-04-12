@@ -1,0 +1,104 @@
+---
+import { useTranslations } from '../i18n/utils';
+
+interface Props {
+  lang: string;
+}
+
+const { lang } = Astro.props;
+const t = useTranslations(lang as any);
+---
+
+<div id="newsletter-container" class="max-w-2xl mx-auto text-center">
+  <h2 class="text-3xl font-serif font-bold mb-4">{t('newsletter.title')}</h2>
+  <p class="text-gray-300 mb-6">{t('newsletter.description')}</p>
+  
+  <form 
+    id="newsletter-form" 
+    class="flex gap-4 max-w-md mx-auto"
+    method="POST"
+  >
+    <input 
+      type="email" 
+      id="subscriber-email"
+      name="email"
+      placeholder={t('newsletter.placeholder')}
+      class="flex-1 px-4 py-2 rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-primary-500"
+      required
+    />
+    <button 
+      type="submit" 
+      class="bg-primary-600 px-6 py-2 rounded-full hover:bg-primary-700 transition-colors duration-200"
+    >
+      {t('newsletter.button')}
+    </button>
+  </form>
+  
+  <div id="subscription-success" class="mt-4 text-green-400 hidden">
+    Thank you for subscribing!
+  </div>
+  <div id="subscription-error" class="mt-4 text-red-400 hidden">
+    There was an error. Please try again.
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('newsletter-form') as HTMLFormElement;
+    const successMessage = document.getElementById('subscription-success');
+    const errorMessage = document.getElementById('subscription-error');
+    
+    if (form) {
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const emailInput = document.getElementById('subscriber-email') as HTMLInputElement;
+        const email = emailInput.value;
+        
+        try {
+          // In a real implementation, this would call a server endpoint that uses Mailjet API
+          // For this demo, we'll simulate a successful subscription
+          
+          // Simulate API call
+          // const response = await fetch('/api/subscribe', {
+          //   method: 'POST',
+          //   headers: {
+          //     'Content-Type': 'application/json',
+          //   },
+          //   body: JSON.stringify({ email }),
+          // });
+          
+          // if (!response.ok) {
+          //   throw new Error('Subscription failed');
+          // }
+          
+          // Show success message
+          if (successMessage) {
+            successMessage.classList.remove('hidden');
+          }
+          if (errorMessage) {
+            errorMessage.classList.add('hidden');
+          }
+          
+          // Reset form
+          form.reset();
+          
+          // In a real implementation with Mailjet, you would:
+          // 1. Create a server endpoint (e.g., /api/subscribe)
+          // 2. Use Mailjet Node.js SDK to add the subscriber to a contact list
+          // 3. Handle errors and return appropriate responses
+          
+        } catch (error) {
+          // Show error message
+          if (errorMessage) {
+            errorMessage.classList.remove('hidden');
+          }
+          if (successMessage) {
+            successMessage.classList.add('hidden');
+          }
+          console.error('Subscription error:', error);
+        }
+      });
+    }
+  });
+</script> 

@@ -1,0 +1,105 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { useTranslations, useTranslatedPath } from '../../i18n/utils';
+import { languages } from '../../i18n/ui';
+
+export async function getStaticPaths() {
+  return Object.keys(languages).map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+---
+
+<Layout title="About - DevBlog">
+  <div class="max-w-3xl mx-auto">
+    <h1 class="text-4xl font-serif font-bold mb-8">{t('about.title')}</h1>
+    
+    <div class="bg-white rounded-lg shadow-sm p-8 mb-12">
+      <div class="flex flex-col md:flex-row gap-8 items-start">
+        <img 
+          src="https://avatars.githubusercontent.com/u/mryesiller" 
+          alt="Profile" 
+          class="rounded-lg w-48 h-48 object-cover"
+        />
+        <div>
+          <h2 class="text-2xl font-bold mb-4">mryesiller</h2>
+          <p class="text-gray-600 mb-4">
+            I'm a software developer with over 5 years of experience in web development. 
+            I'm passionate about creating efficient, scalable solutions and sharing knowledge 
+            with the developer community.
+          </p>
+          <div class="flex gap-4">
+            <a 
+              href="https://twitter.com/mryesiller" 
+              class="text-primary-600 hover:text-primary-700"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Twitter
+            </a>
+            <a 
+              href="https://github.com/mryesiller" 
+              class="text-primary-600 hover:text-primary-700"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              GitHub
+            </a>
+            <a 
+              href="https://linkedin.com/in/mryesiller" 
+              class="text-primary-600 hover:text-primary-700"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <section class="grid gap-8">
+      <div>
+        <h2 class="text-2xl font-serif font-bold mb-4">Skills</h2>
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <div class="grid grid-cols-2 gap-6">
+            <div>
+              <h3 class="font-bold text-lg mb-2">Languages</h3>
+              <ul class="list-disc list-inside text-gray-600">
+                <li>JavaScript / TypeScript</li>
+                <li>HTML & CSS</li>
+                <li>Python</li>
+                <li>PHP</li>
+              </ul>
+            </div>
+            <div>
+              <h3 class="font-bold text-lg mb-2">Frameworks & Tools</h3>
+              <ul class="list-disc list-inside text-gray-600">
+                <li>React / Next.js</li>
+                <li>Node.js</li>
+                <li>Astro</li>
+                <li>Git</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="text-2xl font-serif font-bold mb-4">{t('about.contact')}</h2>
+        <div class="bg-white rounded-lg shadow-sm p-6">
+          <p class="mb-4">
+            {t('about.contactText')}
+          </p>
+          <a 
+            href="mailto:contact@example.com" 
+            class="inline-block bg-primary-600 text-white px-6 py-3 rounded-lg hover:bg-primary-700 transition-colors duration-200"
+          >
+            {t('about.email')}
+          </a>
+        </div>
+      </div>
+    </section>
+  </div>
+</Layout> 

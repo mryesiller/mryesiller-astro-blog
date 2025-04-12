@@ -1,0 +1,127 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+import { useTranslations, useTranslatedPath } from '../../i18n/utils';
+import { languages } from '../../i18n/ui';
+import NewsletterSignup from '../../components/NewsletterSignup.astro';
+
+export async function getStaticPaths() {
+  return Object.keys(languages).map(lang => ({ params: { lang } }));
+}
+
+const { lang } = Astro.params;
+const t = useTranslations(lang as keyof typeof languages);
+const translatePath = useTranslatedPath(lang as keyof typeof languages);
+
+const allPosts = await getCollection('blog');
+
+// Simulated most viewed posts (in a real app, this would come from analytics)
+const mostViewedPosts = allPosts
+  .sort(() => Math.random() - 0.5)
+  .slice(0, 4);
+
+const categories = [
+  {
+    title: t('nav.dev'),
+    description: 'Deep dives into software development, coding tutorials, and best practices',
+    slug: 'dev',
+    color: 'blue',
+    icon: 'code'
+  },
+  {
+    title: t('nav.ai'),
+    description: 'Exploring the latest in artificial intelligence and machine learning',
+    slug: 'ai',
+    color: 'purple',
+    icon: 'brain'
+  },
+  {
+    title: t('nav.daily'),
+    description: 'Day-to-day experiences, tips, and stories from the tech world',
+    slug: 'daily',
+    color: 'green',
+    icon: 'calendar'
+  }
+];
+---
+
+<Layout title="TechHub - Your Technology Blog Platform">
+  <!-- Hero Section -->
+  <section class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-sm overflow-hidden mb-16">
+    <div class="absolute inset-0 bg-gradient-to-r from-primary-600 to-primary-800 opacity-90"></div>
+    <div class="relative py-16 px-8">
+      <div class="max-w-2xl mx-auto text-center text-white">
+        <h1 class="text-5xl font-serif font-bold mb-6">
+          {t('hero.title')}
+        </h1>
+        <p class="text-xl mb-8 text-primary-50">
+          {t('hero.description')}
+        </p>
+        <div class="flex gap-4 justify-center">
+          <a 
+            href={translatePath('/category/dev')}
+            class="bg-white text-primary-600 px-6 py-3 rounded-full hover:bg-primary-50 transition-colors duration-200"
+          >
+            {t('hero.start')}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Most Viewed Section -->
+  <section class="mb-16">
+    <div class="flex justify-between items-center mb-8">
+      <h2 class="text-2xl font-serif font-bold">Most Viewed Posts</h2>
+      <a href={translatePath('/popular')} class="text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">View All →</a>
+    </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
+      {mostViewedPosts.map(post => (
+        <article class="bg-white dark:bg-gray-800 rounded-lg shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-1">
+          <div class="p-4">
+            <div class="text-xs text-primary-600 dark:text-primary-400 mb-2">{post.data.category.toUpperCase()}</div>
+            <h3 class="font-bold mb-2 line-clamp-2">
+              <a 
+                href={translatePath(`/blog/${post.slug}`)}
+                class="text-gray-900 dark:text-gray-100 hover:text-primary-600 dark:hover:text-primary-400"
+              >
+                {post.data.title}
+              </a>
+            </h3>
+            <p class="text-sm text-gray-500 dark:text-gray-400">{post.data.author}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </section>
+
+  <!-- Categories Grid -->
+  <section class="grid md:grid-cols-3 gap-8 mb-16">
+    {categories.map(category => (
+      <a 
+        href={translatePath(`/category/${category.slug}`)}
+        class="bg-white dark:bg-gray-800 rounded-lg shadow-sm p-6 hover:shadow-md transition-all duration-200 transform hover:-translate-y-1"
+      >
+        <div class="flex items-center gap-4 mb-4">
+          <div class={`w-12 h-12 rounded-full bg-${category.color}-100 dark:bg-${category.color}-900 flex items-center justify-center`}>
+            <span class={`text-${category.color}-600 dark:text-${category.color}-400 text-xl`}>
+              {category.icon === 'code' && '< />'}
+              {category.icon === 'brain' && '🧠'}
+              {category.icon === 'calendar' && '📅'}
+            </span>
+          </div>
+          <h2 class="text-xl font-bold">{category.title}</h2>
+        </div>
+        <p class="text-gray-600 dark:text-gray-300 mb-4">{category.description}</p>
+        <span class="inline-block text-primary-600 hover:text-primary-700 dark:text-primary-400 dark:hover:text-primary-300">
+          {t('category.browse')}
+        </span>
+      </a>
+    ))}
+  </section>
+
+  <!-- Newsletter Section -->
+  <section class="bg-gray-900 text-white rounded-2xl p-8 mt-16">
+    <NewsletterSignup lang={lang} />
+  </section>
+</Layout> 

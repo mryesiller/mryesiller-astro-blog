@@ -1,0 +1,30 @@
+---
+import { languages } from '../i18n/ui';
+import { getLangFromUrl, useTranslatedPath, getRouteFromUrl } from '../i18n/utils';
+
+const url = Astro.url;
+const currentLang = getLangFromUrl(url);
+const translatePath = useTranslatedPath(currentLang);
+const route = getRouteFromUrl(url);
+---
+
+<div class="language-picker">
+  <ul>
+    {Object.entries(languages).map(([lang, label]) => (
+      <li>
+        <a 
+          href={`/${lang}${route}`} 
+          class={`nav-link ${currentLang === lang ? 'font-bold text-primary-600' : ''}`}
+        >
+          {label}
+        </a>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .language-picker ul {
+    @apply flex gap-4;
+  }
+</style> 

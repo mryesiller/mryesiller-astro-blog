@@ -1,11 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Open Sans', 'system-ui', 'sans-serif'],
-        serif: ['Source Serif Pro', 'Georgia', 'serif'],
+        sans: ['Helvetica', 'Arial', 'system-ui', 'sans-serif'],
+        serif: ['Helvetica', 'Arial', 'Georgia', 'serif'],
       },
       colors: {
         primary: {
